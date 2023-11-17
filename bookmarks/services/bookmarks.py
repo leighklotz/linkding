@@ -22,8 +22,13 @@ def create_bookmark(bookmark: Bookmark, tag_string: str, current_user: User):
     # Set currently logged in user as owner
     bookmark.owner = current_user
     # Set dates
-    bookmark.date_added = timezone.now()
-    bookmark.date_modified = timezone.now()
+    # [KLOTZ] Allow date_added to be spcified; we don't force it here. if specified it also sets date_modified
+    # [KLOTz] This is for importing; maybe we can find a way to restrict it to a global IMPORT flag if there is concern
+    if bookmark.date_added is None or bookmark.date_added == '':
+        bookmark.date_added = timezone.now()
+        bookmark.date_modified = timezone.now()
+    else:
+        bookmark.date_modified = bookmark.date_added 
     bookmark.save()
     # Update tag list
     _update_bookmark_tags(bookmark, tag_string, current_user)

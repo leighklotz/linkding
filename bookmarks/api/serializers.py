@@ -40,7 +40,8 @@ class BookmarkSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'website_title',
             'website_description',
-            'date_added',
+## [KLOTZ] Allow date_added to be set only in create, ignored elsewhere
+##            'date_added',
             'date_modified'
         ]
         list_serializer_class = BookmarkListSerializer
@@ -54,6 +55,8 @@ class BookmarkSerializer(serializers.ModelSerializer):
     shared = serializers.BooleanField(required=False, default=False)
     # Override readonly tag_names property to allow passing a list of tag names to create/update
     tag_names = TagListField(required=False, default=[])
+    title = serializers.CharField(required=False, allow_blank=True, default='')
+    date_added = serializers.DateTimeField()
 
     def create(self, validated_data):
         bookmark = Bookmark()
@@ -64,6 +67,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
         bookmark.is_archived = validated_data['is_archived']
         bookmark.unread = validated_data['unread']
         bookmark.shared = validated_data['shared']
+        bookmark.date_added = validated_data['date_added']
         tag_string = build_tag_string(validated_data['tag_names'])
         return create_bookmark(bookmark, tag_string, self.context['user'])
 
