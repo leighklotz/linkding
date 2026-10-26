@@ -288,17 +288,17 @@ class UserProfile(models.Model):
     user = models.OneToOneField(get_user_model(), related_name='profile', on_delete=models.CASCADE)
     theme = models.CharField(max_length=10, choices=THEME_CHOICES, blank=False, default=THEME_AUTO)
     bookmark_date_display = models.CharField(max_length=10, choices=BOOKMARK_DATE_DISPLAY_CHOICES, blank=False,
-                                             default=BOOKMARK_DATE_DISPLAY_RELATIVE)
+                                             default=BOOKMARK_DATE_DISPLAY_ABSOLUTE)
     bookmark_link_target = models.CharField(max_length=10, choices=BOOKMARK_LINK_TARGET_CHOICES, blank=False,
                                             default=BOOKMARK_LINK_TARGET_BLANK)
     web_archive_integration = models.CharField(max_length=10, choices=WEB_ARCHIVE_INTEGRATION_CHOICES, blank=False,
                                                default=WEB_ARCHIVE_INTEGRATION_DISABLED)
     tag_search = models.CharField(max_length=10, choices=TAG_SEARCH_CHOICES, blank=False,
                                   default=TAG_SEARCH_STRICT)
-    enable_sharing = models.BooleanField(default=False, null=False)
-    enable_public_sharing = models.BooleanField(default=False, null=False)
+    enable_sharing = models.BooleanField(default=True, null=False)
+    enable_public_sharing = models.BooleanField(default=True, null=False)
     enable_favicons = models.BooleanField(default=False, null=False)
-    display_url = models.BooleanField(default=False, null=False)
+    display_url = models.BooleanField(default=True, null=False)
     permanent_notes = models.BooleanField(default=False, null=False)
     search_preferences = models.JSONField(default=dict, null=False)
 
